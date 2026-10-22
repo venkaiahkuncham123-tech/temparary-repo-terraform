@@ -3,7 +3,7 @@ data "aws_ami" "ami" {
     owners = ["amazon"]
     filter {
         name = "virtualization"
-        values = "hvm"
+        values = ["hvm"]
     }
 }
 resource "aws_instance" "ec2" {
