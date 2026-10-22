@@ -15,3 +15,11 @@ resource "aws_instance" "ec2-north" {
     instance_type = var.itype-north
     provider = aws.north
 }
+
+resource "aws_s3_bucket" "s3-name" {
+    bucket = var.s3-name
+    tags = {
+        Name = "s3-bucket"
+        Environment = "production"
+    }
+}
