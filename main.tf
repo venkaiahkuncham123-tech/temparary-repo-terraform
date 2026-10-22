@@ -1,0 +1,16 @@
+data "aws_ami" "ami" {
+    most_recent = true
+    filter {
+        name = "owner_alias"
+        values = [amazon]
+    }
+}
+resource "aws_instance" "ec2" {
+    ami = data.aws_ami.ami.id
+    type = var.itype
+}
+resource "aws_instance" "ec2-north" {
+    ami = data.aws_ami.ami.id
+    type = var.itype-north
+    provider = aws.north
+}
