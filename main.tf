@@ -2,7 +2,7 @@ data "aws_ami" "ami" {
     most_recent = true
     filter {
         name = "owner_alias"
-        values = [amazon]
+        values = ["amazon"]
     }
 }
 resource "aws_instance" "ec2" {
