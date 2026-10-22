@@ -1,8 +1,8 @@
 variable "itype" {
-    type = String
+    type = string
     default = "t2.micro"
 }
 variable "itype-north" {
-    type = String
+    type = string
     default = "t3.small"
 }

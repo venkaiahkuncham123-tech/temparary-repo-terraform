@@ -7,10 +7,10 @@ data "aws_ami" "ami" {
 }
 resource "aws_instance" "ec2" {
     ami = data.aws_ami.ami.id
-    type = var.itype
+    instance_type = var.itype
 }
 resource "aws_instance" "ec2-north" {
     ami = data.aws_ami.ami.id
-    type = var.itype-north
+    instance_type = var.itype-north
     provider = aws.north
 }
