@@ -1,7 +1,9 @@
 data "aws_ami" "ami" {
-     filter {
-        name = "owner_alias"
-        values = ["amazon"]
+    most_recent = true
+    owners = ["amazon"]
+    filter {
+        name = "virtualization"
+        values = "hvm"
     }
 }
 resource "aws_instance" "ec2" {
