@@ -1,10 +1,10 @@
 module "ec2" {
-    vpc_cidr = "192.100.0.0/16"
-    sub_az = "eu-north-1a"
-    subnet_cidr = "192.100.1.0/24"
-    rt_cidr = "0.0.0.0/0"
-    sg_cidr = "0.0.0.0/0"
-    source = "git::https://github.com/venkaiahkuncham123-tech/temparary-repo-terraform.git"
+    vpc_cidr = var.vpc_cidr
+    sub_az = var.sub_az
+    subnet_cidr = var.subnet_cidr
+    rt_cidr = var.rt_cidr
+    sg_cidr = var.sg_cidr
+    source = "git::https://github.com/venkaiahkuncham123-tech/temparary-repo-terraform.git//modules/vpc?ref=staging"
 }
 resource "aws_instance" "ec2" {
     ami = var.ami
