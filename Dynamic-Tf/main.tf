@@ -1,6 +1,9 @@
 data "aws_availability_zones" "az" {
     state = "available"  
 }
+locals {
+  az = data.aws_availability_zones.az
+}
 data "aws_ami" "ami" {
     most_recent = true
     owners = [ "amazon" ]
@@ -23,14 +26,16 @@ resource "aws_vpc" "vpc" {
         Name = var.common_tags
     }  
 }
-resource "aws_internet_gateway_attachment" "igw_assoc" {
+resource "aws_internet_gateway" "igw" {
     vpc_id = aws_vpc.vpc.id
-    internet_gateway_id = aws_internet_gateway.igw.id
+    tags = {
+      Name = "${var.common_tags}-igw"
+    }
   
 }
 resource "aws_subnet" "public_subnet" {
     cidr_block = var.public_subnet_cidr
-    availability_zone = data.aws_availability_zones.az[0]
+    availability_zone = locals.az[0]
     vpc_id = aws_vpc.vpc.id
     map_public_ip_on_launch = true
     tags = {
@@ -96,7 +101,7 @@ resource "aws_security_group" "sg" {
         from_port = "0"
         to_port = "0"
         protocol = "tcp"
-        cidr_blocks = "-1"
+        cidr_blocks = "[-1]"
     }
 }
 resource "aws_key_pair" "pair" {
