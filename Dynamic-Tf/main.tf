@@ -1,6 +1,5 @@
 data "aws_availability_zones" "az" {
-    state = available
-  
+    state = "available"  
 }
 data "aws_ami" "ami" {
     most_recent = true
@@ -18,15 +17,10 @@ data "aws_ami" "ami" {
     values = ["al2023-ami-*-x86_64"]
   }
 }
-locals {
-  common_tags ={
-    Name = "Phone-Pe"
-  }
-}
 resource "aws_vpc" "vpc" {
     cidr_block = var.vpc_cidr
     tags = {
-        Name = local.common_tags
+        Name = var.common_tags
     }  
 }
 resource "aws_internet_gateway_attachment" "igw_assoc" {
@@ -40,7 +34,7 @@ resource "aws_subnet" "public_subnet" {
     vpc_id = aws_vpc.vpc.id
     map_public_ip_on_launch = true
     tags = {
-        Name = local.common_tags
+        Name = "${var.common_tags}-vpc"
     }  
 }
 resource "aws_route_table" "public_rt" {
@@ -51,7 +45,7 @@ resource "aws_route_table" "public_rt" {
     }
 
     tags = {
-      Name = "${local.common_tags}-Public-rt"
+      Name = "${var.common_tags}-Public-rt"
     }
   
 }
@@ -66,7 +60,7 @@ resource "aws_subnet" "private_subnet" {
     cidr_block = var.private_cidr
     availability_zone = data.aws_availability_zones.az[1]
     tags = {
-      Name = "${local.common_tags}-Private"
+      Name = "${var.common_tags}-Private"
     }
   
 }
@@ -77,7 +71,7 @@ resource "aws_route_table" "private_route_table" {
         cidr_block = var.private_rt_cidr
     }
     tags = {
-      Name = "${local.common_tags}-private-rt"
+      Name = "${var.common_tags}-private-rt"
     }
 }
 resource "aws_route_table_association" "private_rt_assoc" {
@@ -119,7 +113,7 @@ resource "aws_instance" "ec2" {
     associate_public_ip_address = true
 
     tags = {
-        Name = "${local.common_tags}-public-Instance"
+        Name = "${var.common_tags}-public-Instance"
     }    
   
 }
@@ -131,7 +125,7 @@ resource "aws_instance" "private_ec2" {
     vpc_security_group_ids = [ aws_security_group.sg.id]
     subnet_id = aws_subnet.private_subnet.id
     tags = {
-      Name = "${local.common_tags}-Private-Instance"
+      Name = "${var.common_tags}-Private-Instance"
     }
   
 }

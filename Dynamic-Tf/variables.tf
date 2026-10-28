@@ -28,3 +28,8 @@ variable "itype" {
     default = "t3.small"
   
 }
+variable "common_tags" {
+    type = string
+    default = "Phonepe"
+  
+}
