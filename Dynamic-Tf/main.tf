@@ -2,7 +2,7 @@ data "aws_availability_zones" "az" {
     state = "available"  
 }
 locals {
-  az = data.aws_availability_zones.az
+  az = data.aws_availability_zones.az.names
 }
 data "aws_ami" "ami" {
     most_recent = true
@@ -35,7 +35,7 @@ resource "aws_internet_gateway" "igw" {
 }
 resource "aws_subnet" "public_subnet" {
     cidr_block = var.public_subnet_cidr
-    availability_zone = locals.az[0]
+    availability_zone = local.az[0]
     vpc_id = aws_vpc.vpc.id
     map_public_ip_on_launch = true
     tags = {
@@ -63,7 +63,7 @@ resource "aws_route_table_association" "public_rt_association" {
 resource "aws_subnet" "private_subnet" {
     vpc_id = aws_vpc.vpc.id
     cidr_block = var.private_cidr
-    availability_zone = data.aws_availability_zones.az[1]
+    availability_zone = local.az[1]
     tags = {
       Name = "${var.common_tags}-Private"
     }
@@ -100,8 +100,8 @@ resource "aws_security_group" "sg" {
     egress {
         from_port = "0"
         to_port = "0"
-        protocol = "tcp"
-        cidr_blocks = "[-1]"
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
     }
 }
 resource "aws_key_pair" "pair" {
