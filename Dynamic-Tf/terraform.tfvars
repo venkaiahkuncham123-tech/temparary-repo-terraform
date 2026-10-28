@@ -1,0 +1,6 @@
+vpc_cidr = "192.186.0.0/16"
+public_subnet_cidr = "192.186.1.0/24"
+public_route = "0.0.0.0/0"
+private_cidr = "192.186.2.0/24"
+private_rt_cidr = "0.0.0.0/0"
+itype = "t3.micro"
